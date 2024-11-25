@@ -9,6 +9,7 @@ from .widgets.plot_canvas import PlotCanvas
 from processors.base import DataProcessor
 from processors.limit_filter import LimitFilter
 from processors.moving_average import MovingAverage
+from processors.duplicate_filter import DuplicateFilter
 
 class MainWindow(QMainWindow):
     """Main application window."""
@@ -74,7 +75,8 @@ class MainWindow(QMainWindow):
         # 添加处理器
         self.processors = [
             LimitFilter(),
-            MovingAverage()
+            MovingAverage(),
+            DuplicateFilter()
         ]
         
         # 添加处理器控件
@@ -99,6 +101,9 @@ class MainWindow(QMainWindow):
             
         # 更新处理器状态
         current_column = self.column_selector.currentText()
+        if not current_column:  # 如果列名为空，跳过处理
+            return
+            
         current_data = self.df[current_column]
         
         # 更新上下限
